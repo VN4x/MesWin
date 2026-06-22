@@ -1,0 +1,113 @@
+# MesWin — Cursor Rules
+
+Project: commercial window measurement app (Go + PocketBase + SvelteKit + Capacitor + ONNX).
+
+## Always Read First
+
+Before non-trivial work, read:
+- `vision.md` — goals, accuracy bar, window types, stack
+- `taskflow.md` — current phase and deliverables
+- `skills.md` — load the skill matching your area
+- `agents.md` — scope boundaries if working as a specialized agent
+
+## Canonical Stack (do not diverge without updating vision.md)
+
+| Layer | Technology |
+|-------|------------|
+| Backend | Go + PocketBase |
+| CV (production) | ONNX Runtime in Go |
+| CV (runtime) | ONNX Runtime in Go (`yalue/onnxruntime_go`) |
+| CV (training only) | Python, Ultralytics YOLO, Roboflow → export `.onnx` |
+| Frontend | SvelteKit + Vite + Tailwind + Flowbite-Svelte |
+| Mobile | Capacitor + @capacitor/camera |
+| Deploy | Single binary serving static frontend + Docker bundle |
+
+**Not in scope:** Flutter, Python/FastAPI CV microservice, Cloud Run CV service.
+
+## Architecture Rules
+
+1. **Multi-tenant by default** — every business record has `organization_id`; queries must filter by org.
+2. **Go owns business logic** — measuring orders, CV orchestration, exports, licensing checks live in Go.
+3. **PocketBase** — collections, file storage, admin UI, auth; avoid complex logic in PB JS hooks.
+4. **Server is source of truth** — CV results and overrides persist server-side with audit fields.
+5. **Hybrid accuracy** — always support manual overrides; never block user on low confidence.
+6. **Offline-first client** — queue uploads; sync safely; show explicit sync errors.
+
+## Code Conventions
+
+### Go
+
+- Module path: follow `go.mod` once initialized.
+- Table-driven tests for math, exports, and parsers.
+- Context timeouts on inference and external calls.
+- Structured errors; wrap with context.
+- No global mutable state in handlers.
+
+### PocketBase
+
+- Migrations in `pb/migrations/` (or project-established path).
+- Collection rules enforce org isolation — never rely on client-only filtering.
+- File fields for photos; JSON fields for `cv_result` and `overrides` with documented shape.
+
+### SvelteKit / TypeScript
+
+- Match existing Svelte version patterns in repo (runes vs stores — follow neighbors).
+- PocketBase client singleton in `lib/pb.ts`.
+- Prefer Tailwind utilities; Flowbite-Svelte for forms and modals.
+- No hardcoded API URLs — use env (`PUBLIC_PB_URL`).
+
+### CV / ONNX
+
+- Version models: `models/yolo-windows-v{N}.onnx`.
+- Return confidence per dimension in JSON.
+- Target ±5 mm; document failures in `warnings[]`.
+
+## Window Types
+
+Use slug enums from `skills.md` — keep DB, API, and UI in sync.
+
+## API Design
+
+- RESTful, noun-based routes under `/api/`.
+- Idempotent photo uploads where possible.
+- Export endpoints: `.pdf`, `.json`, `.csv`, `.md` — stable schemas, version export format if breaking.
+
+## Security & Privacy
+
+- GDPR: configurable retention; consent before using data for retraining.
+- Validate org access on every mutating route.
+- No secrets in repo; use env templates in `deploy/`.
+- Sanitize file uploads; limit sizes.
+
+## Commits & PRs
+
+- Conventional commits: `feat:`, `fix:`, `docs:`, `chore:`, `test:`.
+- One concern per PR when possible.
+- Update `taskflow.md` checkboxes when completing phase tasks.
+- PR description: what, why, how to test, milestone link if applicable.
+
+## Testing Requirements
+
+- Go: unit tests for new business logic.
+- CV: run against golden images if touching inference.
+- Frontend: Playwright for user-critical paths when touching flows.
+- Manual: camera overlays on real iOS/Android before merging guided capture changes.
+
+## Performance
+
+- Inference should complete in <5s per window on mid-range phone/server.
+- Optimize images client-side before upload when reasonable.
+- PocketBase SQLite fine for MVP; design queries for PostgreSQL later.
+
+## Commercial Awareness
+
+- Features should work for self-hosted single-tenant and multi-tenant SaaS.
+- White-label: avoid hardcoded product name in user-facing strings; use org branding.
+- Export formats are customer-facing contracts — bump version on breaking changes.
+
+## When Unsure
+
+1. Check `vision.md` for product intent.
+2. Check `agents.md` for which agent owns the decision.
+3. Prefer minimal diff; match surrounding code style.
+4. Ask in PR if schema or export contract changes affect other agents.
