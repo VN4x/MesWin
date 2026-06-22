@@ -62,14 +62,14 @@ Specialized agent roles for autonomous and human-in-the-loop development. Each a
 
 ## CV Agent (Training + Pipeline)
 
-**Purpose:** Dataset, YOLO training, ONNX export, dimension extraction, sketch generation.
+**Purpose:** Dataset, YOLO training, ONNX export. **Does not run a server.**
 
 ### Scope
 
 - `cv/` training scripts, Roboflow export ingest
-- Model export and versioning
-- Pipeline: homography, scale from calibration target, JSON + sketch
-- Optional Phase 1 Python/FastAPI prototype (must export same JSON schema as Go)
+- Model export and versioning (`models/*.onnx`)
+- JSON schema contract for `cv_result_json` (shared with Go runtime)
+- Dimension/homography logic is implemented in **Go**, not Python
 
 ### Skills to load
 
@@ -222,7 +222,7 @@ sequenceDiagram
 
 | Conflict | Resolution |
 |----------|------------|
-| Python CV vs Go ONNX | Prototype in Python allowed in Phase 1 only; production is Go ONNX before Phase 4 |
+| ONNX vs Python CV service | **ONNX in Go only** — Python is training/export tooling in `cv/`, never production inference |
 | Flutter vs SvelteKit | **SvelteKit + Capacitor** is canonical (see vision.md) |
 | PocketBase hook vs Go handler | Business logic in Go; PocketBase for CRUD, files, admin UI |
 | Client-side vs server-side measurements | Server persists CV + overrides; client is view + edit proposal |

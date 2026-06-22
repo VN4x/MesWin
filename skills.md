@@ -12,7 +12,7 @@ Domain skills for AI assistants and developers working in this repository. Load 
 
 - **Backend:** Go 1.22+, PocketBase (embedded or sidecar), custom routes via Go hooks or separate HTTP handlers.
 - **DB:** PocketBase/SQLite default; design for PostgreSQL migration (org-scoped queries).
-- **CV:** ONNX Runtime in Go (production); Python/YOLO only for training and optional Phase 1 prototype.
+- **CV:** ONNX Runtime in Go at runtime; Python/Ultralytics **only** for training and ONNX export in `cv/`.
 - **Frontend:** SvelteKit 2, Vite, Tailwind, Flowbite-Svelte, Capacitor 6+.
 - **Auth:** PocketBase auth; JWT/session via JS SDK on client.
 
@@ -87,11 +87,17 @@ Domain skills for AI assistants and developers working in this repository. Load 
 - Target ±5 mm; flag items below confidence threshold for manual review.
 - Always return confidence per dimension; never silently round away uncertainty.
 
-### Training
+### Training (offline only — `cv/`)
 
 - Roboflow for labeling; Ultralytics YOLOv8/v11 for training.
-- Export to ONNX opset compatible with onnxruntime-go.
-- Version models (`models/yolo-windows-v{N}.onnx`) and record in config.
+- Export to ONNX opset compatible with `yalue/onnxruntime_go`.
+- Version models (`models/yolo-windows-v{N}.onnx`) and record path in backend config.
+- **No FastAPI, no Cloud Run, no runtime Python service.**
+
+### Runtime (Go — `backend/internal/cv/`)
+
+- Load ONNX model at startup; run inference in-process.
+- Homography, scale from calibration target, dimension math, sketch render — all in Go (use `gocv` or pure Go/image as needed).
 
 ---
 

@@ -45,16 +45,14 @@ Go + PocketBase backend, SvelteKit + Capacitor frontend, ONNX-based CV. Phases a
 ### Tasks
 
 - [ ] Train/fine-tune YOLOv8/v11 for: calibration target, window frames, sashes, corners, mullions, openable/fixed indicators.
-- [ ] Build processing pipeline: multi-photo → homography correction → dimension extraction → annotated sketch (SVG/PNG) → JSON with confidence scores.
-- [ ] **Early path:** Python/FastAPI microservice on Cloud Run/Docker (optional fast prototype).
-- [ ] **Production path:** Export model to ONNX; integrate ONNX Runtime in Go.
+- [ ] Export model to ONNX; integrate **ONNX Runtime in Go** (`backend/internal/cv/`).
+- [ ] Build processing pipeline in Go: multi-photo → homography correction → dimension extraction → annotated sketch (SVG/PNG) → JSON with confidence scores.
 - [ ] Accuracy target: ±5 mm on held-out test set.
-- [ ] Go client/library wrapping inference (HTTP prototype or in-process ONNX).
 
 ### Deliverables
 
-- Deployable CV capability (microservice prototype **or** Go ONNX package).
-- Go integration tested with sample images.
+- Deployable Go CV package with ONNX inference.
+- Integration tested with sample images from real windows.
 - JSON schema for measurements + sketch assets.
 
 ### Milestone
@@ -147,7 +145,7 @@ Go + PocketBase backend, SvelteKit + Capacitor frontend, ONNX-based CV. Phases a
 
 ### Tasks
 
-- [ ] On-device or pure Go ONNX inference (drop Cloud Run if still used).
+- [ ] On-device ONNX inference (optional: mobile runtime later via Capacitor plugin).
 - [ ] Advanced features: AR preview, bulk orders, analytics dashboard.
 - [ ] Model retraining pipeline from user-corrected data (with consent).
 - [ ] PostgreSQL migration path for multi-tenant scale.
@@ -165,7 +163,7 @@ Go + PocketBase backend, SvelteKit + Capacitor frontend, ONNX-based CV. Phases a
 
 1. **Today:** Set up PocketBase + Go skeleton; commit schema draft.
 2. **This week:** Build calibration target; start dataset collection (Tilt & Turn first).
-3. **In parallel:** Prototype CV (Python stub or ONNX hello-world in Go).
+3. **In parallel:** Export first ONNX model and wire hello-world inference in Go.
 
 ---
 

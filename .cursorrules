@@ -16,12 +16,13 @@ Before non-trivial work, read:
 |-------|------------|
 | Backend | Go + PocketBase |
 | CV (production) | ONNX Runtime in Go |
-| CV (training only) | Python, Ultralytics YOLO, Roboflow |
+| CV (runtime) | ONNX Runtime in Go (`yalue/onnxruntime_go`) |
+| CV (training only) | Python, Ultralytics YOLO, Roboflow → export `.onnx` |
 | Frontend | SvelteKit + Vite + Tailwind + Flowbite-Svelte |
 | Mobile | Capacitor + @capacitor/camera |
 | Deploy | Single binary serving static frontend + Docker bundle |
 
-**Not in scope:** Flutter, permanent Python CV microservice in production.
+**Not in scope:** Flutter, Python/FastAPI CV microservice, Cloud Run CV service.
 
 ## Architecture Rules
 

@@ -13,7 +13,9 @@
 
 ### Key Innovation
 
-Printed **calibration target** + **ONNX YOLO** computer vision running in the **Go backend** (no separate CV microservice in production).
+Printed **calibration target** + **ONNX YOLO** inference via **ONNX Runtime in Go** — one binary, no separate CV service.
+
+**CV decision (final):** Runtime inference is **Go + ONNX only**. Python is used **only offline** for training and ONNX export in `cv/`. No Python/FastAPI microservice.
 
 ---
 
@@ -46,7 +48,7 @@ Printed **calibration target** + **ONNX YOLO** computer vision running in the **
 |-------|------------|
 | Frontend | SvelteKit + Vite + Capacitor (web + native iOS/Android + PWA) |
 | Backend | Go + PocketBase (embedded, single binary) |
-| Computer Vision | Ultralytics YOLO → ONNX → ONNX Runtime in Go (`yalue/onnxruntime_go` or purego) |
+| Computer Vision | Ultralytics YOLO → ONNX export → **ONNX Runtime in Go** (`yalue/onnxruntime_go`) |
 | Database | PocketBase (SQLite initially, PostgreSQL option later) |
 | Storage | PocketBase file fields for photos |
 | Deployment | Single binary / small Docker bundle for self-hosting and commercialization |
