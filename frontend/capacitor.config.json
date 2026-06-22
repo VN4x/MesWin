@@ -1,0 +1,6 @@
+{
+	"appId": "com.meswin.app",
+	"appName": "mesWin",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}

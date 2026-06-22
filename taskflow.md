@@ -10,7 +10,7 @@ Go + PocketBase backend, SvelteKit + Capacitor frontend, ONNX-based CV. Phases a
 
 ### Tasks
 
-- [ ] Define data models: Organizations, Users, Customers, Measuring Orders, Window Items, Files (multi-tenant from the start).
+- [x] Define data models: Organizations, Users, Customers, Measuring Orders, Window Items, Files (multi-tenant from the start).
 - [ ] Design and print professional calibration target (100×100 mm+ triangle, 10 mm red lines, durable/weatherproof).
 - [ ] Capture and label dataset (500–1000+ photos per major type) in Roboflow.
 - [ ] Cover window types in dataset:
@@ -18,8 +18,8 @@ Go + PocketBase backend, SvelteKit + Capacitor frontend, ONNX-based CV. Phases a
   - **Double:** Fixed + Operable, Two Tilt & Turn, French-Style Double Casement
   - **Triple:** Fixed + Center Operable + Fixed, Operable + Fixed + Operable, Triple Fixed/Operable
   - **Multi:** 4+ units, transom combinations, with/without mullions
-- [ ] Set up PocketBase + Go project skeleton.
-- [ ] Prototype CV path: mock HTTP service **or** stub ONNX inference hook from Go.
+- [x] Set up PocketBase + Go project skeleton.
+- [x] Prototype CV path: stub ONNX inference hook from Go.
 
 ### Deliverables
 

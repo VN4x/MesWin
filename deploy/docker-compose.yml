@@ -1,0 +1,15 @@
+services:
+  meswin:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    ports:
+      - "8090:8090"
+    volumes:
+      - meswin_data:/app/pb_data
+    environment:
+      - MESWIN_PUBLIC_DIR=/app/pb_public
+    restart: unless-stopped
+
+volumes:
+  meswin_data:

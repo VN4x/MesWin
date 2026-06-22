@@ -1,0 +1,24 @@
+dist/
+backend/pb_data/
+backend/pb_public/
+backend/meswin
+*.exe
+
+# PocketBase
+pb_data/
+
+# Frontend
+frontend/node_modules/
+frontend/build/
+frontend/.svelte-kit/
+frontend/.env.local
+
+# Go
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
